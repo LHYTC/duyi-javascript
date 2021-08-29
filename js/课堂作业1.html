@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #nzbtn{
+            text-decoration: none;
+            display: inline-block;
+            width: 50px;
+            height: 19px;
+            line-height: 19px;
+            color: orange;
+            background-color: white;
+            border: 1px solid #000;
+            cursor: pointer;
+            text-align: center;
+            vertical-align: middle;
+            border-radius: 4px;
+        }
+        #nzbtn:hover{
+            background-color: orange;
+            color: white;
+        }
+        #msg{
+            border: none;
+            outline: none;
+            color: crimson;
+            width: 200px;
+        }
+        #fbnq{
+            margin: 0;
+            padding: 0;
+            display: inline-block;
+            position: relative;
+            vertical-align: middle;
+            top: -11px;
+            min-width: 520px;
+            border: none;
+        }
+        #fbnq input{
+            position: absolute;
+            top: 2px;
+            left: 0;
+            text-indent: 7rem;
+            outline: none;
+            width: 100%;
+            border: none;
+            overflow: hidden;
+            border: 1px solid #000;
+        }
+        #fbnq span{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 7rem;
+            color: #ddd;
+        }
+    </style>
+    <script>
+        window.onload = function(){
+            var testNum = document.getElementById("testNum");
+            var nzbtn = document.getElementById("nzbtn");
+            var result = document.getElementById("result");
+            var fbnumber = document.getElementById("fbnumber");
+            var fbnqres = document.getElementById("fbnqres");
+            nzbtn.onclick = function(){
+                var num = testNum.value;
+                var lt = swsnz(num);
+                result.value = lt;
+            }
+
+            fbnumber.addEventListener("keyup", function(event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    var n = fbnumber.value;
+                    var arrstr = fbnum(n);
+                    fbnqres.value = arrstr;
+                }
+            });
+
+        }
+        //三位数逆转
+        function swsnz(num){
+            var msg = document.getElementById("msg");
+            if(num){
+                if(num < 100 || num > 999){
+                    msg.value = "请输入100~999之间的三位数";
+                    return 0;
+                }else{
+                    msg.value = "";
+                    //第一种方法
+                    // var three = num % 10;
+                    // var two = ((num - three) / 10) % 10;
+                    // var one = ((num - three) / 10 - two) / 10;
+                    // return three * 100 + two * 10 + one;
+                    //第二种方法
+                    var three = num % 10;
+                    num = num - three;
+                    var tmp = num % 100;
+                    var two = tmp / 10;
+                    num = num - tmp;
+                    var one = num / 100;
+                    return three * 100 + two * 10 + one;
+                }
+            }
+        }
+
+        //斐波那契数列实现
+        function fbnum(n){
+            var arr = [];
+            if(n > 2){
+                arr = [1,1];
+                var one = arr[0];
+                var two = arr[1];
+                for(var i = 2; i < n; i++){
+                    var tmp = one + two;
+                    arr.push(tmp);
+                    one = two;
+                    two = tmp;
+                }
+            }else{
+                for(var i = 0; i < n; i++){
+                    arr.push(1);
+                }
+            }
+            return arr.toString();
+        }
+
+        function fbnum2(n){
+            if(n == 1 || n == 2){
+                return 1;
+            }
+            return fbnum2(n-1) + fbnum2(n-2);
+        }
+    </script>
+</head>
+<body>
+    <input type="number" id="testNum">
+    <a id="nzbtn">逆转</a>
+    <input id="result" type="text" readonly="readonly">
+    <input id="msg" type="text" readonly="readonly">
+<br>
+    <input id="fbnumber" type="number" placeholder="请输入一个数">
+    <div id="fbnq">
+        <input id="fbnqres" type="text" readonly="readonly">
+        <span>斐波那契数列：</span>
+    </div>
+</body>
+</html>
